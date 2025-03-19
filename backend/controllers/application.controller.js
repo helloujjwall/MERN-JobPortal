@@ -99,7 +99,7 @@ const getApplicants = async (req,res)=>{
   }
 }
 
-export const updateStatus = async (req,res)=>{
+const updateStatus = async (req,res)=>{
   try{
     const {status}= res.body;
     const applicationId = req.params.id;
