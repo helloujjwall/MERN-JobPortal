@@ -48,7 +48,7 @@ npm run dev
 
 # Start the frontend server  
 cd ../frontend  
-npm start  
+npm run dev  
 ```  
 
 ## 📌 To-Do (Under Development)  

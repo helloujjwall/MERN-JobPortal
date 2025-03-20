@@ -6,7 +6,7 @@ const register = async (req, res) => {
   try {
     const { fullname, email, password, role } = req.body;
     if (!fullname || !email || !password || !role) {
-      return res.status(400).json({ msg: "Please fill in all fields.", success: false });
+      return res.status(400).json({ message: "Please fill in all fields.", success: false });
     }
     const user = await User.findOne({ email });
     if (user) {

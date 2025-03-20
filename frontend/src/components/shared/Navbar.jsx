@@ -4,6 +4,7 @@ import { Button } from '../ui/button'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import profilePic from "/src/assets/helloujjwall.jpg";
 import { LogOut, User2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const user = false;
@@ -15,15 +16,15 @@ const Navbar = () => {
         </div>
         <div className='flex items-center gap-12'>
           <ul className='flex font-medium items-center gap-5'>
-            <li>Home</li>
+            <Link to='/'>Home</Link>
             <li>Jobs</li>
             <li>Browse</li>
           </ul>
           {
             !user ? (
               <div  className='flex items-center gap-2'>
-                <Button variant='outline'>Login</Button>
-                <Button className='bg-[#6A38C2] hover:bg-[#5b3086]'>Signup</Button>
+                <Link to="/login"><Button variant='outline'>Login</Button></Link>
+                <Link to="/signup"><Button className='bg-[#6A38C2] hover:bg-[#5b3086]'>Signup</Button></Link>
               </div>
             ) : (
               <Popover>
