@@ -33,8 +33,6 @@ const Signup = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
-    console.log("Selected Role:", input.role);
     
     const formData = new FormData();
     formData.append("fullname", input.fullname);
@@ -46,7 +44,7 @@ const Signup = () => {
       formData.append("file", input.file);
     }
     try {
-      const res = await axios.post(`http://localhost:8000/api/v1/user/register`, formData, {
+      const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
@@ -58,7 +56,6 @@ const Signup = () => {
         toast.success(res.data.message || "Login successful");
       }
     } catch (error) {
-      // console.log(error);
       toast.error(error.response.data.message);
      
 

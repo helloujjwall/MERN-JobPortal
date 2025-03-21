@@ -4,23 +4,18 @@ const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   try {
-    console.log("Backend Role Received:", req.body.role);
 
-    const validRoles = ["user", "recruiter"]; // ✅ Valid roles
-
-    const { fullname, email, phoneNumber, password, role } = req.body; // 🔹 Pehle destructure karo
-
-    if (!validRoles.includes(role)) { // ✅ Ab 'role' properly defined hai
-      return res.status(400).json({ success: false, message: "Invalid role selected" });
-    }
+    const { fullname, email, phoneNumber, password, role } = req.body;
 
     if (!fullname || !email || !phoneNumber || !password || !role) {
+      console.log("❌ Missing Fields:", req.body);
       return res.status(400).json({ message: "Please fill in all fields.", success: false });
     }
 
     const user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ msg: "This email already exists.", success: false });
+      console.log("❌ Email already exists.");
+      return res.status(400).json({ message: "This email already exists.", success: false });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -33,32 +28,35 @@ const register = async (req, res) => {
       role,
     });
 
-    return res.status(200).json({ msg: "Account created successfully.", success: true });
+    
+    return res.status(200).json({ message: "Account created successfully.", success: true });
+
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ msg: "Internal Server Error", success: false });
+    console.log("❌ Backend Error:", err);
+    res.status(500).json({ message: "Internal Server Error", success: false });
   }
 };
+
 
 
 const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
     if (!email || !password || !role) {
-      return res.status(400).json({ msg: "Something is missing.", success: false });
+      return res.status(400).json({ message: "Something is missing.", success: false });
     }
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ msg: "Incorrect Email.", success: false });
+      return res.status(400).json({ message: "Incorrect Email.", success: false });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return res.status(400).json({ msg: "Incorrect Password.", success: false });
+      return res.status(400).json({ message: "Incorrect Password.", success: false });
     }
 
     if (user.role !== role) {
-      return res.status(400).json({ msg: "Account doesn't exist with current role", success: false });
+      return res.status(400).json({ message: "Account doesn't exist with current role", success: false });
     }
 
     const tokenData = {
@@ -78,7 +76,7 @@ const login = async (req, res) => {
     return res
       .status(200)
       .cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' })
-      .json({ msg: `Welcome back ${user.fullname}`, success: true, user: userData });
+      .json({ message: `Welcome back ${user.fullname}`, success: true, user: userData });
   } catch (err) {
     console.log(err);
   }
@@ -86,7 +84,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    return res.status(200).cookie("token", "", { maxAge: 0, httpOnly: true }).json({ msg: "Logged out successfully.", success: true });
+    return res.status(200).cookie("token", "", { maxAge: 0, httpOnly: true }).json({ message: "Logged out successfully.", success: true });
   } catch (err) {
     console.log(err);
   }
@@ -104,7 +102,7 @@ const updateProfile = async (req, res) => {
     const userId = req.userId;
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(400).json({ msg: "User not found.", success: false });
+      return res.status(400).json({ message: "User not found.", success: false });
     }
 
     //Updating data
@@ -128,7 +126,7 @@ const updateProfile = async (req, res) => {
       profile: user.profile,
     };
 
-    return res.status(200).json({ msg: "Profile updated successfully.", success: true, user: userData });
+    return res.status(200).json({ message: "Profile updated successfully.", success: true, user: userData });
   } catch (err) {
     console.log(err);
   }
