@@ -15,7 +15,7 @@ const Signup = () => {
     fullname: "",
     email: "",
     password: "",
-    PhoneNumber: "",
+    phoneNumber: "",
     role: "",
     file: ""
   });
@@ -33,17 +33,20 @@ const Signup = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
+    console.log("Selected Role:", input.role);
+    
     const formData = new FormData();
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
-    formData.append("phoneNumber", input.PhoneNumber);
+    formData.append("phoneNumber", input.phoneNumber);
     formData.append("password", input.password);
     formData.append("role", input.role);
     if (input.file) {
       formData.append("file", input.file);
     }
     try {
-      const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
+      const res = await axios.post(`http://localhost:8000/api/v1/user/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
@@ -57,9 +60,7 @@ const Signup = () => {
     } catch (error) {
       // console.log(error);
       toast.error(error.response.data.message);
-      console.log("Full Error:", error);
-      console.log("Error Response:", error.response);
-      console.log("Error Data:", error.response?.data);
+     
 
 
     }
@@ -120,8 +121,8 @@ const Signup = () => {
                 <Input
                   type='radio'
                   name='role'
-                  value='student'
-                  checked={input.role === 'student'}
+                  value='user'
+                  checked={input.role === 'user'}
                   onChange={changeEventHandler}
                   className='cursor-pointer' />
                 <Label htmlFor="r1">Student</Label>

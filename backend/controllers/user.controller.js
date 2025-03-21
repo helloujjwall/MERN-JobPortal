@@ -4,27 +4,42 @@ const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   try {
-    const { fullname, email, password, role } = req.body;
-    if (!fullname || !email || !password || !role) {
+    console.log("Backend Role Received:", req.body.role);
+
+    const validRoles = ["user", "recruiter"]; // ✅ Valid roles
+
+    const { fullname, email, phoneNumber, password, role } = req.body; // 🔹 Pehle destructure karo
+
+    if (!validRoles.includes(role)) { // ✅ Ab 'role' properly defined hai
+      return res.status(400).json({ success: false, message: "Invalid role selected" });
+    }
+
+    if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({ message: "Please fill in all fields.", success: false });
     }
+
     const user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ msg: "This email already exists.", success: false });
     }
+
     const hashPassword = await bcrypt.hash(password, 10);
 
     await User.create({
       fullname,
       email,
+      phoneNumber,
       password: hashPassword,
       role,
     });
+
     return res.status(200).json({ msg: "Account created successfully.", success: true });
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ msg: "Internal Server Error", success: false });
   }
 };
+
 
 const login = async (req, res) => {
   try {
@@ -80,11 +95,11 @@ const logout = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
-    const file =req.file;
+    const file = req.file;
 
     let skillsArray
-    if(skills){
-        skillsArray = skills.split(",");
+    if (skills) {
+      skillsArray = skills.split(",");
     }
     const userId = req.userId;
     let user = await User.findById(userId);
@@ -94,14 +109,14 @@ const updateProfile = async (req, res) => {
 
     //Updating data
 
-    if(fullname) user.fullname = fullname;
-    if(email) user.email = email;
-    if(phoneNumber) user.phoneNumber = phoneNumber;
-    if(bio) user.bio = bio;
-    if(skillsArray) user.profile.skills = skillsArray;
-    
-    
-    
+    if (fullname) user.fullname = fullname;
+    if (email) user.email = email;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (bio) user.bio = bio;
+    if (skillsArray) user.profile.skills = skillsArray;
+
+
+
     await user.save();
 
     const userData = {
