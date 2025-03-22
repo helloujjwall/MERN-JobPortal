@@ -62,7 +62,8 @@ const login = async (req, res) => {
     const tokenData = {
       userId: user._id,
     };
-    const token = await jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+    const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: "1d" });
 
     const userData = {
       _id: user._id,

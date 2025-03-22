@@ -7,10 +7,11 @@ const userRoute = require('./routes/user.route.js');
 const companyRoute = require('./routes/company.route.js')
 const jobRoute = require('./routes/job.route.js')
 const applicationRoute = require('./routes/application.route.js')
+
 dotenv.config({});
+console.log("JWT_SECRET:", process.env.SECRET_KEY);
 
 const app = express(); 
-
 
 
 // Middleware
