@@ -4,17 +4,17 @@ const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   try {
-
+    // console.log("Received Data:", req.body);
     const { fullname, email, phoneNumber, password, role } = req.body;
 
     if (!fullname || !email || !phoneNumber || !password || !role) {
-      console.log("❌ Missing Fields:", req.body);
+      // console.log("❌ Missing Fields:", req.body);
       return res.status(400).json({ message: "Please fill in all fields.", success: false });
     }
 
     const user = await User.findOne({ email });
     if (user) {
-      console.log("❌ Email already exists.");
+      // console.log("❌ Email already exists.");
       return res.status(400).json({ message: "This email already exists.", success: false });
     }
 
@@ -32,7 +32,7 @@ const register = async (req, res) => {
     return res.status(200).json({ message: "Account created successfully.", success: true });
 
   } catch (err) {
-    console.log("❌ Backend Error:", err);
+    // console.log("❌ Backend Error:", err);
     res.status(500).json({ message: "Internal Server Error", success: false });
   }
 };

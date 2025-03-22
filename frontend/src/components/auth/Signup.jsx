@@ -53,12 +53,10 @@ const Signup = () => {
 
       if (res.data.success) {
         navigate("/login");
-        toast.success(res.data.message || "Login successful");
+        toast.success(res.data.message);
       }
     } catch (error) {
       toast.error(error.response.data.message);
-     
-
 
     }
   }
