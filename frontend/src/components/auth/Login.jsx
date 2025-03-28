@@ -8,6 +8,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/constant'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading } from '@/redux/authSlice'
+import { Loader2 } from 'lucide-react'
 
 
 const Login = () => {
@@ -17,7 +20,9 @@ const Login = () => {
     password: "",
     role: "",
   });
+  const { loading } = useSelector(store => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value })
@@ -25,22 +30,25 @@ const Login = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("Sending Data: ", input);  
+    console.log("Sending Data: ", input);
     try {
-          const res = await axios.post(`${USER_API_END_POINT}/login`, input,{
-            headers:{
-              "Content-Type":"application/json"
-            },
-            withCredentials:true,
-          });
-          
-          if(res.data.success){
-            navigate("/");
-            toast.success(res.data.message)
-          }
+      dispatch(setLoading(true));
+      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true,
+      });
+
+      if (res.data.success) {
+        navigate("/");
+        toast.success(res.data.message)
+      }
     } catch (error) {
-      console.log("Axios Error Response: ", error.response);
-        toast.error(error.response.data.message);
+      console.log(error);
+      toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   }
 
@@ -77,28 +85,31 @@ const Login = () => {
             <RadioGroup className='flex items-center gap-4'>
               <div className="flex items-center space-x-2">
                 <Input
-                type='radio' 
-                name='role' 
-                value='user' 
-                checked={input.role ==='user'}
-                onChange={changeEventHandler}
-                className='cursor-pointer'
+                  type='radio'
+                  name='role'
+                  value='user'
+                  checked={input.role === 'user'}
+                  onChange={changeEventHandler}
+                  className='cursor-pointer'
                 />
                 <Label htmlFor="r1">Student</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Input 
-                type='radio' 
-                name='role' 
-                value='recruiter' 
-                checked={input.role ==='recruiter'}
-                onChange={changeEventHandler}
-                className='cursor-pointer '
+                <Input
+                  type='radio'
+                  name='role'
+                  value='recruiter'
+                  checked={input.role === 'recruiter'}
+                  onChange={changeEventHandler}
+                  className='cursor-pointer '
                 />
                 <Label htmlFor="r2">Recruiter</Label>
               </div>
             </RadioGroup>
           </div>
+          {
+            loading ? <Button><Loader2 className='mr-2 h-4 w-4 animate-spin' />Please wait</Button>
+          }
           <Button type='submit' className='w-full mt-12 mb-3 bg-[#6A38C2]'>Login</Button>
           <span className='text-sm '>Don't have an account? <Link to='/signup' className='text-blue-600'>Signup</Link></span>
         </form>
