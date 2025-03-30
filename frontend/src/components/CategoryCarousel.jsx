@@ -18,7 +18,7 @@ function CategoryCarousel() {
           {
             category.map((cat, index) => (
               <CarouselItem className='md:basis-1/3 lg-basis-1/3'>
-                <Button variant='outline' className='rounded-full' >{cat}</Button>
+                <Button variant='outline' className='rounded-full bg-[#f5f2f2]' >{cat}</Button>
               </CarouselItem>
             ))
           }
