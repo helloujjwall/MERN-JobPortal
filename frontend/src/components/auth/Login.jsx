@@ -108,9 +108,11 @@ const Login = () => {
             </RadioGroup>
           </div>
           {
-            loading ? <Button><Loader2 className='mr-2 h-4 w-4 animate-spin' />Please wait</Button>
+            loading
+              ? <Button className='w-full my-4'><Loader2 className='mr-2 h-4 w-4 animate-spin' />Please wait</Button>
+              : <Button type='submit' className='w-full mt-12 mb-3 bg-[#6A38C2]'>Login</Button>
           }
-          <Button type='submit' className='w-full mt-12 mb-3 bg-[#6A38C2]'>Login</Button>
+
           <span className='text-sm '>Don't have an account? <Link to='/signup' className='text-blue-600'>Signup</Link></span>
         </form>
       </div>
