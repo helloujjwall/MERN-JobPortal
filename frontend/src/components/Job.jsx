@@ -6,7 +6,7 @@ import { Badge } from './ui/badge'
 
 function Job() {
   return (
-    <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100 mb-8 mx-auto w-[95%]  mt-5'>
+    <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100 mb-7 mx-auto w-[95%]  mt-5'>
       <div className='flex items-center justify-between'>
         <p className='text-sm text-gray-500 '>2 days ago</p>
         <Button variant='outline' className='rounded-full' size='icon'><Bookmark /></Button>
