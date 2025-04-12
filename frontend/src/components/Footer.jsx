@@ -21,7 +21,7 @@ function Footer() {
       </div>
 
       {/* Company Info */}
-      <p className="text-sm">&copy; {new Date().getFullYear()} <span className="font-semibold">JobPortal</span>. All rights reserved.</p>
+      <p className="text-sm">&copy; {new Date().getFullYear()} <span className="font-semibold">JobNative</span>. All rights reserved.</p>
 
       {/* Developer Info */}
       <p className="text-xs mt-1">
